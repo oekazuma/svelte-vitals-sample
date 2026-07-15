@@ -2,8 +2,11 @@ import adapter from '@sveltejs/adapter-auto';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
+import { svelteVitals } from '@svelte-vitals/vite';
+
 export default defineConfig({
 	plugins: [
+		svelteVitals(),
 		sveltekit({
 			compilerOptions: {
 				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
