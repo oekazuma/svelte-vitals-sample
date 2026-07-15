@@ -11,17 +11,13 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      '@svelte-vitals/vite':
-        specifier: link:../svelte-vitals/packages/vite
-        version: link:../svelte-vitals/packages/vite
-      svelte-vitals:
-        specifier: link:../svelte-vitals/packages/cli
-        version: link:../svelte-vitals/packages/cli
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.7.0)
+      '@svelte-vitals/vite':
+        specifier: link:../svelte-vitals/packages/vite
+        version: link:../svelte-vitals/packages/vite
       '@sveltejs/adapter-auto':
         specifier: ^7.0.1
         version: 7.0.1(@sveltejs/kit@2.69.3(@sveltejs/vite-plugin-svelte@7.2.0(svelte@5.56.5(@typescript-eslint/types@8.64.0))(vite@8.1.4(@types/node@24.13.3)))(svelte@5.56.5(@typescript-eslint/types@8.64.0))(typescript@6.0.3)(vite@8.1.4(@types/node@24.13.3)))
@@ -58,6 +54,9 @@ importers:
       svelte-check:
         specifier: ^4.6.0
         version: 4.7.2(picomatch@4.0.5)(svelte@5.56.5(@typescript-eslint/types@8.64.0))(typescript@6.0.3)
+      svelte-vitals:
+        specifier: link:../svelte-vitals/packages/cli
+        version: link:../svelte-vitals/packages/cli
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
