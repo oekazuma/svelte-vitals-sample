@@ -51,7 +51,9 @@ pnpm dev
 再実行すると6件あったcriticalが4件に減る（残り4件は他の4ルートのSEO002 —
 「1ページ直しても他はまだ、だからCIゲートが要る」という流れで話す）。
 
-**修正B: blog 一覧の画像に width/height を追加（PERF001を解消）**
+**修正B: blog 一覧の画像に width/height を追加（PERF001を1件解消）**
+
+（`/blog` 側の1件だけ解消される。`/blog/[slug]` 側は別途もう1件残る。）
 
 `src/routes/blog/+page.svelte` の `<img>` を:
 
@@ -70,7 +72,8 @@ gh pr create --head demo-pr --base main --title "Add product reviews page" \
 
 PRが開いたら GitHub Actions（`.github/workflows/svelte-vitals.yml`）が自動実行され、
 インライン注釈・ジョブサマリ・固定PRコメントが `products/[id]/reviews/+page.svelte` の
-新規問題（SEO001, SEO002, SEO003, SEO008, PERF001, SEC001）に対して付く。`main` 側の
+新規問題（SEO001, SEO002, SEO003, SEO008, PERF001, SEC001 など。実際にはCORRECT001や
+og:image/twitter:card系の細かいwarning/infoも一緒に並ぶ）に対して付く。`main` 側の
 既存の問題は `diff`/`baseline` が `origin/main` 基準のため出てこない。
 
 ## うまくいかなかったときのフォールバック
