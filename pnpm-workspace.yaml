@@ -1,2 +1,5 @@
 allowBuilds:
   esbuild: true
+overrides:
+  '@svelte-vitals/vite': link:../svelte-vitals/packages/vite
+  svelte-vitals: link:../svelte-vitals/packages/cli
