@@ -1,42 +1,80 @@
-# sv
+# svelte-vitals-sample
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+svelte-vitals 紹介デモ用のSvelteKitアプリ。「Sveltebean Coffee Roasters」という架空の小規模コーヒー
+焙煎所サイトで、SEO・Performance・Correctness・Security・Architecture の5カテゴリすべてに
+自然な形で問題を仕込んである。
 
-## Creating a project
+## 発表前チェックリスト
 
-If you're seeing this, you've probably already done this step. Congrats!
+- [ ] `svelte-vitals` 本体（`~/localRepo/svelte-vitals`）で `pnpm -r build` 済みであること
+      （このリポジトリは `pnpm link` でローカルビルドを直接参照している）
+- [ ] `pnpm install` 済みであること
+- [ ] `pnpm exec svelte-vitals --version` がエラーなく実行できること
+- [ ] `demo-pr` ブランチが GitHub に push 済みであること（`git ls-remote origin demo-pr`）
+- [ ] ネットワークが不安定な会場では、事前に `pnpm dev` を一度起動して動作確認しておく
 
-```sh
-# create a new project
-npx sv create my-app
+## 発表中に使うコマンド
+
+### 1. CLI 実行と Health スコア
+
+```bash
+pnpm exec svelte-vitals --verbose
 ```
 
-To recreate this project with the same configuration:
+critical が6件 — `/contact` の SEO001（title欠落、このルートだけ）と、SEO002（meta description欠落）が
+全5ルートに1件ずつ。レイアウトに `<svelte:head>` が一切無いのが原因で、warning/infoの SEO003・SEO008も
+同じ理由で全ルートに出ている。他に PERF001（blog）、CORRECT002（blog詳細）、SEC001・ARCH002（product）、
+SEC002（contact）、og:image/og:title等の細かいSEO系warning/infoが多数続く——「素のSvelteKitアプリはこれくらい
+何も持っていない」という導入として使う。
 
-```sh
-# recreate this project
-pnpm dlx sv@0.16.3 create --template minimal --types ts --add prettier eslint --install pnpm svelte-vitals-sample
+### 2. ライブダッシュボード
+
+```bash
+pnpm dev
 ```
 
-## Developing
+ブラウザで `http://localhost:5173/__svelte-vitals/` を開く（起動ログにもURLが出る）。
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### 3. ライブ修正の例（スコアが動く瞬間）
 
-```sh
-npm run dev
+**修正A: contact ページに `<title>` と `<meta name="description">` を追加（criticalを2件解除）**
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+`src/routes/contact/+page.svelte` の `<script>` の直後に追加:
+
+```svelte
+<svelte:head>
+  <title>Contact · Sveltebean Coffee Roasters</title>
+  <meta name="description" content="Get in touch with Sveltebean Coffee Roasters." />
+</svelte:head>
 ```
 
-## Building
+再実行すると6件あったcriticalが4件に減る（残り4件は他の4ルートのSEO002 —
+「1ページ直しても他はまだ、だからCIゲートが要る」という流れで話す）。
 
-To create a production version of your app:
+**修正B: blog 一覧の画像に width/height を追加（PERF001を解消）**
 
-```sh
-npm run build
+`src/routes/blog/+page.svelte` の `<img>` を:
+
+```svelte
+<img src={post.image} alt={post.title} width="640" height="400" />
 ```
 
-You can preview the production build with `npm run preview`.
+修正後に `pnpm exec svelte-vitals` を再実行してスコアの変化を見せる。
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+### 4. GitHub PR連携
+
+```bash
+gh pr create --head demo-pr --base main --title "Add product reviews page" \
+  --body "Adds a customer reviews page for product detail pages."
+```
+
+PRが開いたら GitHub Actions（`.github/workflows/svelte-vitals.yml`）が自動実行され、
+インライン注釈・ジョブサマリ・固定PRコメントが `products/[id]/reviews/+page.svelte` の
+新規問題（SEO001, SEO002, SEO003, SEO008, PERF001, SEC001）に対して付く。`main` 側の
+既存の問題は `diff`/`baseline` が `origin/main` 基準のため出てこない。
+
+## うまくいかなかったときのフォールバック
+
+- ダッシュボードが開かない → CLI出力とこのREADMEのスクリーンショットで代替
+- Wi-Fiが不安定 → `gh pr create` はスキップし、`pnpm exec svelte-vitals --diff main` の
+  ローカル出力で同じ内容を説明する
