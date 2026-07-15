@@ -4,9 +4,20 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  svelte-vitals: link:../svelte-vitals/packages/cli
+  '@svelte-vitals/vite': link:../svelte-vitals/packages/vite
+
 importers:
 
   .:
+    dependencies:
+      '@svelte-vitals/vite':
+        specifier: link:../svelte-vitals/packages/vite
+        version: link:../svelte-vitals/packages/vite
+      svelte-vitals:
+        specifier: link:../svelte-vitals/packages/cli
+        version: link:../svelte-vitals/packages/cli
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
