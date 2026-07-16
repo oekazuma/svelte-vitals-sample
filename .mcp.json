@@ -1,0 +1,8 @@
+{
+	"mcpServers": {
+		"svelte-vitals": {
+			"command": "node",
+			"args": ["node_modules/@svelte-vitals/mcp/dist/bin.js"]
+		}
+	}
+}
